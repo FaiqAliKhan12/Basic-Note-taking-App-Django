@@ -3,12 +3,13 @@ from .models import Note
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import login,authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 
 
 #create editor page
-
+@login_required(login_url='/login/')
 def editor(request):
     docid = int(request.GET.get('docid',0))
     notes = Note.objects.all()
@@ -42,7 +43,7 @@ def editor(request):
     return render(request,'editor.html',context)
 
 # create delete notes page
-
+@login_required(login_url='/login/')
 def delete_note(request,docid):
     note = Note.objects.get(pk=docid)
     note.delete()
